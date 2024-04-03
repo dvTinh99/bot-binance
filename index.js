@@ -17,6 +17,7 @@ var initOpen = 0;
 var totalBuyed = 0;
 const COIN_TRADE =  'W/USDT';
 const USDT_TRADE = 25;
+const MAX = 1.1;
 
 var count = 0;
 
@@ -60,10 +61,10 @@ async function tick() {
             buyed = true;
             initOpen = open;
 
-            totalBuyed = USDT_TRADE / close;
+            totalBuyed = USDT_TRADE / open;
 
 
-            const order = await binance.createLimitBuyOrder(COIN_TRADE, totalBuyed, close)
+            const order = await binance.createLimitBuyOrder(COIN_TRADE, totalBuyed, open)
             console.log('tốn usdt :', order.cost);
             console.log('đổi được :', order.amount);
             console.log('ở giá:', order.price);
@@ -88,7 +89,7 @@ async function tick() {
                 close : close,
                 height : height,
             });
-            const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, close);
+            const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, open);
             console.log('đã bán :', order.amount);
             console.log('ở giá :', order.price);
         }
