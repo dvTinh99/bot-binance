@@ -15,8 +15,10 @@ const binance = new ccxt.binance({
 var buyed = false;
 var initOpen = 0;
 var totalBuyed = 0;
-const COIN_TRADE =  'ALGO/USDT';
+const COIN_TRADE =  'W/USDT';
 const USDT_TRADE = 25;
+
+var count = 0;
 
 binance.setSandboxMode(true);
 
@@ -41,7 +43,7 @@ async function getBalance(coin) {
 }
 async function tick() {
     try {
-        
+        count += 1;
         const prices = await binance.fetchOHLCV(COIN_TRADE, '1s', undefined, 1);
         let open = prices[0][1]
         let close = prices[0][4]
@@ -91,14 +93,14 @@ async function tick() {
             console.log('ở giá :', order.price);
         }
     } catch (error) {
-        console.log('error catch ne', error);
+        console.log('error catch ne' + count, error);
         
     }
 }
 async function main() {
     
     // tick();
-    setInterval(tick, 1000);
+    setInterval(tick, 500);
     
 
 }
