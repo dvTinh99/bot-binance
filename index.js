@@ -15,7 +15,7 @@ const binance = new ccxt.binance({
 var buyed = false;
 var initOpen = 0;
 var totalBuyed = 0;
-const COIN_TRADE =  'W/USDT';
+const COIN_TRADE =  'ALGO/USDT';
 const USDT_TRADE = 30;
 const MAX = 2;
 
@@ -25,39 +25,30 @@ var count = 0;
 
 async function printBalance() {
     
+    let target = COIN_TRADE.split('/')[0];
     const balance = await binance.fetchBalance();
     const coins = balance['info']['balances'];
     const USDT = coins.find( e => e.asset == 'USDT');
-    const W = coins.find( e => e.asset == 'W');
+    const coinTarget = coins.find( e => e.asset == target);
     console.log('USDT', USDT);
-    console.log('W', W);
+    console.log('coinTarget', coinTarget);
     
 }
 
-async function getBalance(coin) {
-    
-    const balance = await binance.fetchBalance();
-    const coins = balance['info']['balances'];
-    const numberInBalance = coins.find( e => e.asset == coin);
-    console.log('numberInBalance', numberInBalance);
-    return numberInBalance.free;
-    
-}
 async function tick() {
     try {
         count += 1;
+        // await binance.loadMarkets();
+
+        // const W = binance.market(COIN_TRADE);
         const load = await binance.fetchTicker(COIN_TRADE);
         
         if (load.open > 0) {
-            const prices = await binance.fetchOHLCV(COIN_TRADE, '1s', undefined, 1);
-            let open = prices[0][1]
-            let close = prices[0][4]
-            let height = prices[0][2]
+            // const prices = await binance.fetchOHLCV(COIN_TRADE, '1s', undefined, 1);
+            let open = load.open;
             if (!buyed) {
                 console.log({
                     open : open,
-                    close : close,
-                    height : height,
                 });
                 initOpen = open;
                 
@@ -65,9 +56,7 @@ async function tick() {
                     buyed = true;
     
                     totalBuyed = USDT_TRADE / open;
-        
-        
-                    // const order = await binance.createLimitBuyOrder(COIN_TRADE, totalBuyed, open + 0.05)
+                    const order = await binance.createLimitBuyOrder(COIN_TRADE, totalBuyed, open + 0.05)
                     console.log('tốn usdt :', order.cost);
                     console.log('mua được :', order.amount);
                     console.log('ở giá:', order.price);
@@ -76,22 +65,18 @@ async function tick() {
                 printBalance();
     
             }
-            if (height / initOpen > 5) {
+            if (open / initOpen > 5) {
                 console.log({
                     open : open,
-                    close : close,
-                    height : height,
                 });
-                // const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, open);
+                const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, open);
                 console.log('đã bán x5:', order.amount);
                 console.log('ở giá :', order.price);
-            } else if(height / initOpen > 3) {
+            } else if(open / initOpen > 3) {
                 console.log({
                     open : open,
-                    close : close,
-                    height : height,
                 });
-                // const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, open);
+                const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, open);
                 console.log('đã bán x3:', order.amount);
                 console.log('ở giá :', order.price);
             }
@@ -109,27 +94,4 @@ async function main() {
 
 }
 
-async function buySpotMarket(coin, cost) {
-    // const balance = await binance.fetchBalance();
-    // console.log('info', balance['info']);
-    const order = await binance.createMarketBuyOrder(coin, cost)
-    return order;
-}
-async function buySpotLimit(coin, cost) {
-    // const balance = await binance.fetchBalance();
-    // console.log('info', balance['info']);
-    const order = await binance.createLimitBuyOrder(coin, cost, cost)
-    return order;
-}
-
 main()
-async function checkCoin(coin) {
-    const fetchStatus = await binance.fetchTicker(coin);
-    console.log('fetchStatus', fetchStatus);
-    
-}
-
-// checkCoin('W/USDT');
-// printBalance();
-// console.log('getBalance("BNB")', await getBalance('BNB'));
-// buySpotMarket('ALGO/USDT', 100)
