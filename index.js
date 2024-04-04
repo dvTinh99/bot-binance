@@ -21,7 +21,7 @@ const MAX = 2;
 
 var count = 0;
 
-// binance.setSandboxMode(true);
+binance.setSandboxMode(true);
 
 async function printBalance() {
     
@@ -43,9 +43,26 @@ async function tick() {
         // const W = binance.market(COIN_TRADE);
         const load = await binance.fetchTicker(COIN_TRADE);
         
+        // console.log('load', load);
+        
         if (load.open > 0) {
+
+            const prices = await binance.fetchOHLCV(COIN_TRADE, '1m', undefined, 1);
+            let open = prices[0][1]
+            let close = prices[0][4]
+            let height = prices[0][2]
+
+            // console.log('load open', load.open);
+            // console.log('load close', load.close);
+            
+            
+            // let open = load.open;
+            // let close = load.close;
+            console.log({
+                open : open,
+                close : close,
+            });
             // const prices = await binance.fetchOHLCV(COIN_TRADE, '1s', undefined, 1);
-            let open = load.open;
             if (!buyed) {
                 console.log({
                     open : open,
