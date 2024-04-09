@@ -14,7 +14,7 @@ var initClose = 0;
 var totalBuyed = 0;
 const COIN_TRADE =  'SAGA/USDT';
 const USDT_TRADE = 30;
-const MAX = 2;
+const MAX = 5;
 
 var count = 0;
 
