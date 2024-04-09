@@ -12,7 +12,7 @@ const SECRET_KEY = process.env.SECRET_KEY || 'zPHxZEGLmV4bHJuEvDv61Ie26nndINHP5O
 var buyed = false;
 var initClose = 0;
 var totalBuyed = 0;
-const COIN_TRADE =  'WING/BTC';
+const COIN_TRADE =  'SAGA/USDT';
 const USDT_TRADE = 30;
 const MAX = 2;
 
