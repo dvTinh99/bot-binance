@@ -10,7 +10,7 @@ const SECRET_KEY = process.env.SECRET_KEY || 'zPHxZEGLmV4bHJuEvDv61Ie26nndINHP5O
 
 
 var buyed = false;
-var initOpen = 0;
+var initClose = 0;
 var totalBuyed = 0;
 const COIN_TRADE =  'WING/BTC';
 const USDT_TRADE = 30;
@@ -46,60 +46,42 @@ async function tick() {
         const load = await binance.fetchTicker(COIN_TRADE);
         
         // console.log('load', load);
-        
-        if (load.open > 0) {
-
-            const prices = await binance.fetchOHLCV(COIN_TRADE, '1m', undefined, 1);
-            let open = prices[0][1]
-            let close = prices[0][4]
-            let height = prices[0][2]
-
-            // console.log('load open', load.open);
-            // console.log('load close', load.close);
-            
-            
-            // let open = load.open;
-            // let close = load.close;
+        let close = load.close; 
+        if (!buyed) {
             console.log({
-                open : open,
                 close : close,
             });
-            // const prices = await binance.fetchOHLCV(COIN_TRADE, '1s', undefined, 1);
-            if (!buyed) {
-                console.log({
-                    open : open,
-                });
-                initOpen = open;
-                
-                if (open < MAX) {
-                    buyed = true;
-    
-                    totalBuyed = USDT_TRADE / open;
-                    // const order = await binance.createLimitBuyOrder(COIN_TRADE, totalBuyed, open + 0.05)
-                    console.log('tốn usdt :', order.cost);
-                    console.log('mua được :', order.amount);
-                    console.log('ở giá:', order.price);
-                }
-    
-                // printBalance();
-    
+            initClose = close;
+            
+            if (close < MAX) {
+                buyed = true;
+
+                totalBuyed = USDT_TRADE / close;
+                // const order = await binance.createLimitBuyOrder(COIN_TRADE, totalBuyed, close + 0.05)
+                console.log('tốn usdt :', order.cost);
+                console.log('mua được :', order.amount);
+                console.log('ở giá:', order.price);
             }
-            if (open / initOpen > 5) {
-                console.log({
-                    open : open,
-                });
-                // const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, open);
-                console.log('đã bán x5:', order.amount);
-                console.log('ở giá :', order.price);
-            } else if(open / initOpen > 3) {
-                console.log({
-                    open : open,
-                });
-                // const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, open);
-                console.log('đã bán x3:', order.amount);
-                console.log('ở giá :', order.price);
-            }
+
+            // printBalance();
+
         }
+        if (close / initClose > 5) {
+            console.log({
+                close : close,
+            });
+            // const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, close);
+            console.log('đã bán x5:', order.amount);
+            console.log('ở giá :', order.price);
+        } else if(close / initClose > 3) {
+            console.log({
+                close : close,
+            });
+            // const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, close);
+            console.log('đã bán x3:', order.amount);
+            console.log('ở giá :', order.price);
+        }
+        
     } catch (error) {
         console.log('error catch ne' + count, error);
         
