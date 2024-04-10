@@ -31,19 +31,13 @@ async function printBalance(binance) {
 async function tick(binance) {
     try {
         count += 1;
-        // await binance.loadMarkets();
-
-        // const W = binance.market(COIN_TRADE);
-        const load = await binance.fetchTicker(COIN_TRADE);
-		let close = load.close; 
+        await binance.loadMarkets();
         
         if (!buyed) {
             // that mean buy with 20$
-
             let exampleTotalAmount = 2;
             let exampleTotalProce = USDT_TRADE / exampleTotalAmount;
             const order = await binance.createOrder(COIN_TRADE, 'market', 'buy', exampleTotalAmount, exampleTotalProce)
-
 			buyed = true;
 			console.log('tốn usdt :', order.cost);
 			console.log('mua được :', order.amount);
@@ -52,6 +46,9 @@ async function tick(binance) {
 			initClose = order.price;
 			printBalance(binance);
         }
+
+		const load = await binance.fetchTicker(COIN_TRADE);
+		var close = load.close; 
 
         if (close / initClose > 2) {
             console.log({
