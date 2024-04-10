@@ -40,8 +40,6 @@ async function tick(binance) {
         // const W = binance.market(COIN_TRADE);
         const load = await binance.fetchTicker(COIN_TRADE);
         
-        let close = load.close; 
-        console.log('close' + count, close);
         if (!buyed) {
             // that mean buy with 20$
 
@@ -88,6 +86,10 @@ async function tick(binance) {
             console.log('ở giá :', order.price);
             console.log('thu được usdt :', order.cost);
         }
+
+
+        let close = load.close; 
+        console.log('close' + count, close);
         
     } catch (error) {
         console.log('error catch ne' + count, error);
