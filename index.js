@@ -43,6 +43,7 @@ async function tick(binance) {
         let close = load.close; 
         console.log('close' + count, close);
         if (!buyed) {
+            const order = await binance.createOrder(COIN_TRADE, 'market', 'buy', 2, 10)
             console.log({
                 close : close,
             });
@@ -50,13 +51,8 @@ async function tick(binance) {
             
             if (close < MAX) {
                 buyed = true;
-
-                totalBuyed = USDT_TRADE / close;
-                console.log('totalBuyed', totalBuyed);
-                console.log('USDT_TRADE', USDT_TRADE);
-                console.log('close', close);
                 
-                const order = await binance.createOrder(COIN_TRADE, 'market', 'buy', totalBuyed, close)
+                
                 
                 console.log('order', order);
                 
