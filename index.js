@@ -37,6 +37,7 @@ async function tick(binance) {
 
         // const W = binance.market(COIN_TRADE);
         const load = await binance.fetchTicker(COIN_TRADE);
+		let close = load.close; 
         
         if (!buyed) {
             // that mean buy with 20$
@@ -44,12 +45,9 @@ async function tick(binance) {
             let exampleTotalAmount = 2;
             let exampleTotalProce = USDT_TRADE / exampleTotalAmount;
             const order = await binance.createOrder(COIN_TRADE, 'market', 'buy', exampleTotalAmount, exampleTotalProce)
-            console.log({
-                close : close,
-            });
-            initClose = close;
             
-            if (close < MAX) {
+
+			if (close < MAX) {
                 buyed = true;
                 console.log('tốn usdt :', order.cost);
                 console.log('mua được :', order.amount);
@@ -79,10 +77,7 @@ async function tick(binance) {
             console.log('ở giá :', order.price);
             console.log('thu được usdt :', order.cost);
         }
-
-
-        let close = load.close; 
-        console.log('close' + count, close);
+        console.log('close' + moment().format(), close);
         
     } catch (error) {
         console.log('error catch ne' + count, error);
