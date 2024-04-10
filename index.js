@@ -44,7 +44,10 @@ async function tick(binance) {
         console.log('close' + count, close);
         if (!buyed) {
             // that mean buy with 20$
-            const order = await binance.createOrder(COIN_TRADE, 'market', 'buy', 2, 10)
+
+            let exampleTotalAmount = 2;
+            let exampleTotalProce = USDT_TRADE / exampleTotalAmount;
+            const order = await binance.createOrder(COIN_TRADE, 'market', 'buy', exampleTotalAmount, exampleTotalProce)
             console.log({
                 close : close,
             });
