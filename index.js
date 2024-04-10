@@ -12,25 +12,25 @@ const SECRET_KEY = process.env.SECRET_KEY || 'zPHxZEGLmV4bHJuEvDv61Ie26nndINHP5O
 var buyed = false;
 var initClose = 0;
 var totalBuyed = 0;
-const COIN_TRADE =  'SAGA/USDT';
-const USDT_TRADE = 30;
+const COIN_TRADE =  'ALGO/USDT';
+const USDT_TRADE = 20;
 const MAX = 5;
 
 var count = 0;
 
 
 
-// async function printBalance() {
+async function printBalance(binance) {
     
-//     let target = COIN_TRADE.split('/')[0];
-//     const balance = await binance.fetchBalance();
-//     const coins = balance['info']['balances'];
-//     const USDT = coins.find( e => e.asset == 'USDT');
-//     const coinTarget = coins.find( e => e.asset == target);
-//     console.log('USDT', USDT);
-//     console.log('coinTarget', coinTarget);
+    let target = COIN_TRADE.split('/')[0];
+    const balance = await binance.fetchBalance();
+    const coins = balance['info']['balances'];
+    const USDT = coins.find( e => e.asset == 'USDT');
+    const coinTarget = coins.find( e => e.asset == target);
+    console.log('USDT', USDT);
+    console.log('coinTarget', coinTarget);
     
-// }
+}
 
 async function tick() {
     let binance = new ccxt.binance({
@@ -57,13 +57,19 @@ async function tick() {
                 buyed = true;
 
                 totalBuyed = USDT_TRADE / close;
-                // const order = await binance.createLimitBuyOrder(COIN_TRADE, totalBuyed, close + 0.05)
+                console.log('totalBuyed', totalBuyed);
+                console.log('USDT_TRADE', USDT_TRADE);
+                console.log('close', close);
+                
+                const order = await binance.createOrder(COIN_TRADE, 'market', 'buy', totalBuyed, close)
+                
+                console.log('order', order);
+                
                 console.log('tốn usdt :', order.cost);
                 console.log('mua được :', order.amount);
                 console.log('ở giá:', order.price);
+                printBalance(binance);
             }
-
-            // printBalance();
 
         }
         if (close / initClose > 5) {
