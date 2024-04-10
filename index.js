@@ -14,8 +14,6 @@ var initClose = 0;
 var totalBuyed = 0;
 const COIN_TRADE =  'ALGO/USDT';
 const USDT_TRADE = 20;
-const MAX = 5;
-
 var count = 0;
 
 async function printBalance(binance) {
@@ -45,19 +43,14 @@ async function tick(binance) {
             let exampleTotalAmount = 2;
             let exampleTotalProce = USDT_TRADE / exampleTotalAmount;
             const order = await binance.createOrder(COIN_TRADE, 'market', 'buy', exampleTotalAmount, exampleTotalProce)
-            
 
-			if (close < MAX) {
-                buyed = true;
-                console.log('tốn usdt :', order.cost);
-                console.log('mua được :', order.amount);
-                console.log('ở giá:', order.price);
-                totalBuyed = order.amount;
-                initClose = order.price;
-                printBalance(binance);
-            }
-
-            
+			buyed = true;
+			console.log('tốn usdt :', order.cost);
+			console.log('mua được :', order.amount);
+			console.log('ở giá:', order.price);
+			totalBuyed = order.amount;
+			initClose = order.price;
+			printBalance(binance);
         }
 
         if (close / initClose > 5) {
@@ -80,7 +73,7 @@ async function tick(binance) {
         console.log('close' + moment().format(), close);
         
     } catch (error) {
-        console.log('error catch ne' + count, error);
+        console.log('error catch ne' + moment().format(), error);
         
     }
     return ;
