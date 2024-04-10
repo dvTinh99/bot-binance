@@ -68,24 +68,30 @@ async function tick() {
                 console.log('tốn usdt :', order.cost);
                 console.log('mua được :', order.amount);
                 console.log('ở giá:', order.price);
+                totalBuyed = order.amount;
+                initClose = order.price;
                 printBalance(binance);
             }
 
+            
         }
+
         if (close / initClose > 5) {
             console.log({
                 close : close,
             });
-            // const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, close);
-            console.log('đã bán x5:', order.amount);
+            const order = await binance.createOrder(COIN_TRADE, 'market', 'sell', totalBuyed)
+            console.log('đã bán:', order.amount);
             console.log('ở giá :', order.price);
+            console.log('thu được usdt :', order.cost);
         } else if(close / initClose > 3) {
             console.log({
                 close : close,
             });
-            // const order = await binance.createLimitSellOrder(COIN_TRADE, totalBuyed, close);
-            console.log('đã bán x3:', order.amount);
+            const order = await binance.createOrder(COIN_TRADE, 'market', 'sell', totalBuyed)
+            console.log('đã bán:', order.amount);
             console.log('ở giá :', order.price);
+            console.log('thu được usdt :', order.cost);
         }
         
     } catch (error) {
