@@ -32,12 +32,7 @@ async function printBalance(binance) {
     
 }
 
-async function tick() {
-    let binance = new ccxt.binance({
-        apiKey : API_KEY,
-        secret : SECRET_KEY,
-    });
-    binance.setSandboxMode(true);
+async function tick(binance) {
     try {
         count += 1;
         // await binance.loadMarkets();
@@ -46,7 +41,7 @@ async function tick() {
         const load = await binance.fetchTicker(COIN_TRADE);
         
         let close = load.close; 
-        console.log('close', close);
+        console.log('close' + count, close);
         if (!buyed) {
             console.log({
                 close : close,
@@ -103,7 +98,15 @@ async function tick() {
 async function main() {
     
     // tick();
-    setInterval(tick, 100);
+    var binance = new ccxt.binance({
+        apiKey : API_KEY,
+        secret : SECRET_KEY,
+    });
+    binance.setSandboxMode(true);
+    while (true) {
+        await tick(binance);
+    }
+    // setInterval(tick, 100);
     
 
 }
