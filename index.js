@@ -45,8 +45,8 @@ async function tick() {
         // const W = binance.market(COIN_TRADE);
         const load = await binance.fetchTicker(COIN_TRADE);
         
-        // console.log('load', load);
         let close = load.close; 
+        console.log('close', close);
         if (!buyed) {
             console.log({
                 close : close,
