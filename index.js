@@ -18,8 +18,6 @@ const MAX = 5;
 
 var count = 0;
 
-
-
 async function printBalance(binance) {
     
     let target = COIN_TRADE.split('/')[0];
@@ -53,11 +51,6 @@ async function tick(binance) {
             
             if (close < MAX) {
                 buyed = true;
-                
-                
-                
-                console.log('order', order);
-                
                 console.log('tốn usdt :', order.cost);
                 console.log('mua được :', order.amount);
                 console.log('ở giá:', order.price);
