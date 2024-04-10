@@ -53,15 +53,7 @@ async function tick(binance) {
 			printBalance(binance);
         }
 
-        if (close / initClose > 5) {
-            console.log({
-                close : close,
-            });
-            const order = await binance.createOrder(COIN_TRADE, 'market', 'sell', totalBuyed)
-            console.log('đã bán:', order.amount);
-            console.log('ở giá :', order.price);
-            console.log('thu được usdt :', order.cost);
-        } else if(close / initClose > 3) {
+        if (close / initClose > 2) {
             console.log({
                 close : close,
             });
