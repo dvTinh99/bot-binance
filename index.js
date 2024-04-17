@@ -12,7 +12,7 @@ const SECRET_KEY = process.env.SECRET_KEY || 'zPHxZEGLmV4bHJuEvDv61Ie26nndINHP5O
 var buyed = false;
 var initClose = 0;
 var totalBuyed = 0;
-const COIN_TRADE =  'ALGO/USDT';
+const COIN_TRADE =  'OMNI/USDT';
 const USDT_TRADE = 20;
 var count = 0;
 
@@ -31,7 +31,8 @@ async function printBalance(binance) {
 async function tick(binance) {
     try {
         count += 1;
-        await binance.loadMarkets();
+        // load market không work
+        // await binance.loadMarkets();
         
         if (!buyed) {
             // that mean buy with 20$
@@ -70,15 +71,17 @@ async function tick(binance) {
 async function main() {
     
     // tick();
-    var binance = new ccxt.binance({
-        apiKey : API_KEY,
-        secret : SECRET_KEY,
-    });
-    binance.setSandboxMode(true);
+    // binance.setSandboxMode(true);
     while (true) {
+        var binance = new ccxt.binance({
+            apiKey : 'iPy7Ss2VkBuC2LlqGr25dTZTNt4PPCfehXA7B1EfX7AoKhEHtNzPmGaAzYoBY0FA',
+            secret : '4fRmmAZfFhN0W0suXEWQydeXIuOk5J2QmbziyrO1ntq8ROHdZJsxTG8ebVhnsohq',
+        });
         await tick(binance);
     }
     // setInterval(tick, 100);
+
+    // printBalance(binance);
     
 
 }
