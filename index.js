@@ -12,7 +12,7 @@ const SECRET_KEY = process.env.SECRET_KEY || 'zPHxZEGLmV4bHJuEvDv61Ie26nndINHP5O
 var buyed = false;
 var initClose = 0;
 var totalBuyed = 0;
-const COIN_TRADE =  'OMNI/USDT';
+const COIN_TRADE = 'REZ/USDT';
 const USDT_TRADE = 20;
 var count = 0;
 
@@ -28,8 +28,12 @@ async function printBalance(binance) {
     
 }
 
-async function tick(binance) {
+async function tick() {
     try {
+        let binance = new ccxt.binance({
+            apiKey : 'iPy7Ss2VkBuC2LlqGr25dTZTNt4PPCfehXA7B1EfX7AoKhEHtNzPmGaAzYoBY0FA',
+            secret : '4fRmmAZfFhN0W0suXEWQydeXIuOk5J2QmbziyrO1ntq8ROHdZJsxTG8ebVhnsohq',
+        });
         count += 1;
         // load market không work
         // await binance.loadMarkets();
@@ -73,11 +77,8 @@ async function main() {
     // tick();
     // binance.setSandboxMode(true);
     while (true) {
-        var binance = new ccxt.binance({
-            apiKey : 'iPy7Ss2VkBuC2LlqGr25dTZTNt4PPCfehXA7B1EfX7AoKhEHtNzPmGaAzYoBY0FA',
-            secret : '4fRmmAZfFhN0W0suXEWQydeXIuOk5J2QmbziyrO1ntq8ROHdZJsxTG8ebVhnsohq',
-        });
-        await tick(binance);
+        
+        await tick();
     }
     // setInterval(tick, 100);
 
@@ -86,4 +87,30 @@ async function main() {
 
 }
 
-main()
+// main()
+
+async function fetchPrice() {
+    let binance = new ccxt.binance({
+        apiKey : 'iPy7Ss2VkBuC2LlqGr25dTZTNt4PPCfehXA7B1EfX7AoKhEHtNzPmGaAzYoBY0FA',
+        secret : '4fRmmAZfFhN0W0suXEWQydeXIuOk5J2QmbziyrO1ntq8ROHdZJsxTG8ebVhnsohq',
+    });
+    // load market không work
+    // await binance.loadMarkets();
+    
+    let data = await binance.fetchOHLCV(COIN_TRADE, '1s', 1714478400000, 10);
+    data = data.map(item => {
+        return {
+            raw : item[0],
+            timestamp : moment(item[0]).format(),
+            open : item[1],
+            height : item[2],
+            low : item[3],
+            close : item[4],
+            volume : item[5],
+        }
+    });
+
+    console.log('data', data);
+    
+}
+fetchPrice();
